@@ -1,0 +1,742 @@
+@import "tailwindcss";
+
+/* =========================================================================
+   resQlink — Design System (2026)
+   Type: Space Grotesk (UI) + JetBrains Mono (incident IDs / coordinates).
+   Palette: white surfaces + Rwanda flag accents
+     · Kigali blue  #00A1DE
+     · Sun yellow   #FAD201
+     · Hill green   #206131
+     · Emergency red for critical severity only.
+   THEMING: every surface / ink token is an indirection over a raw CSS
+   variable (--ink-*, --sl-*, --panel-*…). LIGHT (white) is the default;
+   adding the `dark` class on <html> (see src/hooks/useTheme.ts) swaps the
+   raw variables and the whole UI follows. `--color-white` / `--color-black`
+   are "overlay inks" that flip too, while `--color-surface-paper` and
+   `--color-btn-ink` never flip (literal paper / literal dark ink).
+   `.theme-island-dark` pins a subtree to the dark palette in either theme
+   (e.g. map canvases, code blocks).
+   ========================================================================= */
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Neutrals (theme-aware) */
+  --color-ink-950: var(--ink-950);
+  --color-ink-900: var(--ink-900);
+  --color-ink-850: var(--ink-850);
+  --color-ink-800: var(--ink-800);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+  --color-ink-500: var(--ink-500);
+  --color-ink-400: var(--ink-400);
+
+  /* Slate ramp (theme-aware — overrides the Tailwind defaults) */
+  --color-slate-100: var(--sl-100);
+  --color-slate-200: var(--sl-200);
+  --color-slate-300: var(--sl-300);
+  --color-slate-400: var(--sl-400);
+  --color-slate-500: var(--sl-500);
+  --color-slate-600: var(--sl-600);
+  --color-slate-700: var(--sl-700);
+  --color-slate-800: var(--sl-800);
+  --color-slate-900: var(--sl-900);
+  --color-slate-950: var(--sl-950);
+
+  /* Overlay inks flip with the theme; paper & button-ink never do */
+  --color-white: var(--overlay-ink);
+  --color-black: var(--overlay-fog);
+  --color-surface-paper: var(--surface-paper);
+  --color-btn-ink: #0b1220;
+  /* Headings / high-contrast ink: near-black navy on white, white on dark */
+  --color-ink-hd: var(--ink-hd);
+  /* Ink for text sitting on saturated accent buttons — stays white */
+  --color-accent-ink: #ffffff;
+
+  /* Card surfaces (theme-aware) */
+  --color-panel: var(--panel);
+  --color-panel-mid: var(--panel-mid);
+  --color-panel-deep: var(--panel-deep);
+
+  /* Rwanda flag blue */
+  --color-rwblue-200: var(--rwblue-200);
+  --color-rwblue-300: var(--rwblue-300);
+  --color-rwblue-400: var(--rwblue-400);
+  --color-rwblue-500: #00a1de;
+  --color-rwblue-600: #007fb0;
+  --color-rwblue-700: #005f85;
+
+  /* Rwanda sun yellow */
+  --color-rwsun-100: var(--rwsun-100);
+  --color-rwsun-300: var(--rwsun-300);
+  --color-rwsun-400: var(--rwsun-400);
+  --color-rwsun-500: #fad201;
+  --color-rwsun-600: #c9a801;
+
+  /* Rwanda hill green */
+  --color-rwgreen-300: var(--rwgreen-300);
+  --color-rwgreen-400: #2f8f5b;
+  --color-rwgreen-500: #206131;
+
+  /* Emergency red */
+  --color-alert-400: var(--alert-400);
+  --color-alert-500: #dc2626;
+  --color-alert-600: #b91c1c;
+
+  /* Standard-palette levels that need to flip with the theme */
+  --color-cyan-300: var(--cy-300);
+  --color-cyan-400: var(--cy-400);
+  --color-sky-300: var(--sky-300);
+  --color-sky-400: var(--sky-400);
+  --color-amber-300: var(--am-300);
+  --color-amber-400: var(--am-400);
+  --color-yellow-300: var(--ye-300);
+  --color-yellow-400: var(--ye-400);
+  --color-emerald-300: var(--em-300);
+  --color-emerald-400: var(--em-400);
+  --color-green-300: var(--gr-300);
+  --color-green-400: var(--gr-400);
+  --color-red-300: var(--rd-300);
+  --color-red-400: var(--rd-400);
+  --color-orange-300: var(--or-300);
+  --color-orange-400: var(--or-400);
+  --color-blue-300: var(--bl-300);
+  --color-blue-400: var(--bl-400);
+  --color-rose-300: var(--ro-300);
+  --color-rose-400: var(--ro-400);
+  --color-violet-300: var(--vi-300);
+  --color-indigo-300: var(--in-300);
+
+  /* *-950 chips: dark tints in dark mode, light tints in light mode */
+  --color-cyan-950: var(--cy-950);
+  --color-sky-950: var(--sky-950);
+  --color-amber-950: var(--am-950);
+  --color-yellow-950: var(--ye-950);
+  --color-emerald-950: var(--em-950);
+  --color-green-950: var(--gr-950);
+  --color-red-950: var(--rd-950);
+  --color-orange-950: var(--or-950);
+  --color-blue-950: var(--bl-950);
+  --color-rose-950: var(--ro-950);
+  --color-indigo-950: var(--in-950);
+  --color-violet-950: var(--vi-950);
+
+  --shadow-glow-cyan: 0 18px 44px -24px rgba(0, 161, 222, 0.55);
+  --shadow-glow-amber: 0 18px 44px -26px rgba(201, 168, 1, 0.5);
+  --shadow-glow-red: 0 18px 44px -22px rgba(220, 38, 38, 0.5);
+  --shadow-lift: 0 24px 50px -30px rgba(3, 10, 24, 0.45);
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-float-slow: float 11s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 3.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-shimmer: shimmer 3.4s linear infinite;
+  --animate-spin-slow: spin 22s linear infinite;
+  --animate-gradient: gradient-pan 10s ease infinite;
+  --animate-rise: rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-scanline: scanline 5s ease-in-out infinite;
+  --animate-ticker: ticker 1.4s ease-in-out infinite;
+}
+
+/* ------------------------------------------------ raw theme values — LIGHT is default */
+
+:root {
+  /* White page, blue-tinted surfaces */
+  --ink-950: #ffffff;
+  --ink-900: #ffffff;
+  --ink-850: #f6fafd;
+  --ink-800: #eef5fa;
+  --ink-700: #e1ecf4;
+  --ink-600: #cbdcea;
+  --ink-500: #9db4c8;
+  --ink-400: #6b8299;
+
+  --overlay-ink: #0f1c33;
+  --overlay-fog: #000000;
+  --ink-hd: #0b1524;
+
+  --surface-paper: #e3f1fb;
+
+  --panel: #ffffff;
+  --panel-mid: #f3f9fd;
+  --panel-deep: #e9f3fb;
+
+  --sl-100: #16233a;
+  --sl-200: #23324c;
+  --sl-300: #3b4d6b;
+  --sl-400: #5a6b85;
+  --sl-500: #6b7d95;
+  --sl-600: #475569;
+  --sl-700: #cbd5e1;
+  --sl-800: #dfe8f1;
+  --sl-900: #f3f7fb;
+  --sl-950: #f8fafc;
+
+  /* Rwanda blue: readable on white for text roles */
+  --rwblue-200: #0369a1;
+  --rwblue-300: #0074a8;
+  --rwblue-400: #007fb0;
+  --rwsun-100: #8a5c04;
+  --rwsun-300: #92610a;
+  --rwsun-400: #a16207;
+  --rwgreen-300: #15803d;
+  --alert-400: #dc2626;
+
+  --cy-300: #0e7490;
+  --cy-400: #0891b2;
+  --sky-300: #0369a1;
+  --sky-400: #0284c7;
+  --am-300: #b45309;
+  --am-400: #d97706;
+  --ye-300: #a16207;
+  --ye-400: #ca8a04;
+  --em-300: #047857;
+  --em-400: #059669;
+  --gr-300: #15803d;
+  --gr-400: #16a34a;
+  --rd-300: #dc2626;
+  --rd-400: #dc2626;
+  --or-300: #c2410c;
+  --or-400: #ea580c;
+  --bl-300: #1d4ed8;
+  --bl-400: #2563eb;
+  --ro-300: #be123c;
+  --ro-400: #e11d48;
+  --vi-300: #6d28d9;
+  --in-300: #4338ca;
+
+  --cy-950: #ecfeff;
+  --sky-950: #f0f9ff;
+  --am-950: #fffbeb;
+  --ye-950: #fefce8;
+  --em-950: #ecfdf5;
+  --gr-950: #f0fdf4;
+  --rd-950: #fef2f2;
+  --or-950: #fff7ed;
+  --bl-950: #eff6ff;
+  --ro-950: #fff1f2;
+  --in-950: #eef2ff;
+  --vi-950: #f5f3ff;
+
+  --body-ink: #29384f;
+  --grid-dot: rgba(0, 95, 133, 0.14);
+  --hair-line: rgba(15, 28, 51, 0.05);
+}
+
+/* Dark palette — the tactical command-center look. Shared by `html.dark`
+   and by any `.theme-island-dark` subtree that must stay dark in light mode.
+   Declarations on the element itself always beat inherited custom
+   properties, so `.theme-island-dark` pins its subtree in either theme. */
+html.dark,
+.theme-island-dark {
+  --ink-950: #060d19;
+  --ink-900: #081428;
+  --ink-850: #0a1932;
+  --ink-800: #0c1f40;
+  --ink-700: #14294f;
+  --ink-600: #1d3560;
+  --ink-500: #2a4676;
+  --ink-400: #4a6b96;
+
+  --overlay-ink: #ffffff;
+  --overlay-fog: #000000;
+  --ink-hd: #ffffff;
+
+  --surface-paper: #ffffff;
+
+  --panel: #0c1f40;
+  --panel-mid: #102a5e;
+  --panel-deep: #071733;
+
+  --sl-100: #f1f5f9;
+  --sl-200: #e2e8f0;
+  --sl-300: #cbd5e1;
+  --sl-400: #94a3b8;
+  --sl-500: #64748b;
+  --sl-600: #475569;
+  --sl-700: #334155;
+  --sl-800: #1e293b;
+  --sl-900: #0f172a;
+  --sl-950: #020617;
+
+  --rwblue-200: #bae6fd;
+  --rwblue-300: #7fd8f5;
+  --rwblue-400: #35b8e8;
+  --rwsun-100: #fef9c3;
+  --rwsun-300: #ffe27a;
+  --rwsun-400: #fbd63f;
+  --rwgreen-300: #6fd39c;
+  --alert-400: #fb6a6a;
+
+  --cy-300: #67e8f9;
+  --cy-400: #22d3ee;
+  --sky-300: #7dd3fc;
+  --sky-400: #38bdf8;
+  --am-300: #fcd34d;
+  --am-400: #fbbf24;
+  --ye-300: #fde047;
+  --ye-400: #facc15;
+  --em-300: #6ee7b7;
+  --em-400: #34d399;
+  --gr-300: #86efac;
+  --gr-400: #4ade80;
+  --rd-300: #fca5a5;
+  --rd-400: #f87171;
+  --or-300: #fdba74;
+  --or-400: #fb923c;
+  --bl-300: #93c5fd;
+  --bl-400: #60a5fa;
+  --ro-300: #fda4af;
+  --ro-400: #fb7185;
+  --vi-300: #c4b5fd;
+  --in-300: #a5b4fc;
+
+  --cy-950: #083344;
+  --sky-950: #082f49;
+  --am-950: #451a03;
+  --ye-950: #422006;
+  --em-950: #022c22;
+  --gr-950: #052e16;
+  --rd-950: #450a0a;
+  --or-950: #431407;
+  --bl-950: #172554;
+  --ro-950: #4c0519;
+  --in-950: #1e1b4b;
+  --vi-950: #2e1065;
+
+  --body-ink: #d7e1ef;
+  --grid-dot: rgba(127, 216, 245, 0.13);
+  --hair-line: rgba(255, 255, 255, 0.05);
+}
+
+/* Tailwind's `--color-*` tokens are computed once on <html> and inherited as
+   literals, so a dark island in the light theme must re-declare the
+   indirection itself for its subtree to resolve against the dark raw values
+   declared above. */
+.theme-island-dark {
+  --color-ink-950: var(--ink-950);
+  --color-ink-900: var(--ink-900);
+  --color-ink-850: var(--ink-850);
+  --color-ink-800: var(--ink-800);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+  --color-ink-500: var(--ink-500);
+  --color-ink-400: var(--ink-400);
+  --color-slate-100: var(--sl-100);
+  --color-slate-200: var(--sl-200);
+  --color-slate-300: var(--sl-300);
+  --color-slate-400: var(--sl-400);
+  --color-slate-500: var(--sl-500);
+  --color-slate-600: var(--sl-600);
+  --color-slate-700: var(--sl-700);
+  --color-slate-800: var(--sl-800);
+  --color-slate-900: var(--sl-900);
+  --color-slate-950: var(--sl-950);
+  --color-white: var(--overlay-ink);
+  --color-black: var(--overlay-fog);
+  --color-surface-paper: var(--surface-paper);
+  --color-ink-hd: var(--ink-hd);
+  --color-panel: var(--panel);
+  --color-panel-mid: var(--panel-mid);
+  --color-panel-deep: var(--panel-deep);
+  --color-rwblue-200: var(--rwblue-200);
+  --color-rwblue-300: var(--rwblue-300);
+  --color-rwblue-400: var(--rwblue-400);
+  --color-rwsun-100: var(--rwsun-100);
+  --color-rwsun-300: var(--rwsun-300);
+  --color-rwsun-400: var(--rwsun-400);
+  --color-rwgreen-300: var(--rwgreen-300);
+  --color-alert-400: var(--alert-400);
+  --color-cyan-300: var(--cy-300);
+  --color-cyan-400: var(--cy-400);
+  --color-sky-300: var(--sky-300);
+  --color-sky-400: var(--sky-400);
+  --color-amber-300: var(--am-300);
+  --color-amber-400: var(--am-400);
+  --color-yellow-300: var(--ye-300);
+  --color-yellow-400: var(--ye-400);
+  --color-emerald-300: var(--em-300);
+  --color-emerald-400: var(--em-400);
+  --color-green-300: var(--gr-300);
+  --color-green-400: var(--gr-400);
+  --color-red-300: var(--rd-300);
+  --color-red-400: var(--rd-400);
+  --color-orange-300: var(--or-300);
+  --color-orange-400: var(--or-400);
+  --color-blue-300: var(--bl-300);
+  --color-blue-400: var(--bl-400);
+  --color-rose-300: var(--ro-300);
+  --color-rose-400: var(--ro-400);
+  --color-cyan-950: var(--cy-950);
+  --color-sky-950: var(--sky-950);
+  --color-amber-950: var(--am-950);
+  --color-yellow-950: var(--ye-950);
+  --color-emerald-950: var(--em-950);
+  --color-green-950: var(--gr-950);
+  --color-red-950: var(--rd-950);
+  --color-orange-950: var(--or-950);
+  --color-blue-950: var(--bl-950);
+  --color-rose-950: var(--ro-950);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(-0.6deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.75;
+  }
+  70% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -180% 0;
+  }
+  100% {
+    background-position: 180% 0;
+  }
+}
+
+@keyframes gradient-pan {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scanline {
+  0%,
+  100% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(120%);
+    opacity: 1;
+  }
+}
+
+@keyframes ticker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--body-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-rwsun-500);
+    color: var(--color-btn-ink);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-rwblue-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink-900);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-600);
+    border-radius: 999px;
+    border: 2px solid var(--color-ink-900);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-500);
+  }
+
+  /* Native controls follow the surface so selects/inputs read cleanly on white */
+  select,
+  input,
+  textarea {
+    color: var(--sl-100);
+    background-color: var(--panel);
+  }
+}
+
+/* ---------------------------------------------------------------- utilities */
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* kept for backwards compatibility with existing components */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility glass {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(15, 28, 51, 0.08);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+@utility glass-dark {
+  background: rgba(8, 20, 40, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+
+@utility text-gradient {
+  background: linear-gradient(100deg, #0b1524 8%, #007fb0 55%, #206131 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility text-gradient-warm {
+  background: linear-gradient(100deg, #a16207 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gradient border card (Rwanda flag stripe) */
+@utility aurora-border {
+  position: relative;
+  background-clip: padding-box;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      120deg,
+      rgba(0, 161, 222, 0.75),
+      rgba(250, 210, 1, 0.55),
+      rgba(32, 97, 49, 0.5),
+      rgba(0, 161, 222, 0.75)
+    );
+    background-size: 300% 300%;
+    animation: gradient-pan 8s ease infinite;
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* Subtle dotted grid background */
+@utility bg-grid {
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+@utility bg-hair {
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--hair-line) 0px,
+    var(--hair-line) 1px,
+    transparent 1px,
+    transparent 34px
+  );
+}
+
+@utility shimmer-text {
+  background: linear-gradient(
+    100deg,
+    rgba(0, 127, 176, 0.55) 20%,
+    #007fb0 42%,
+    rgba(0, 127, 176, 0.55) 62%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3.4s linear infinite;
+}
+
+/* ------------------------------------------------- dark-theme refinements */
+
+html.dark .glass {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+html.dark .glass-dark {
+  background: linear-gradient(
+    160deg,
+    rgba(8, 16, 29, 0.92),
+    rgba(4, 8, 16, 0.78)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+html.dark .text-gradient {
+  background: linear-gradient(100deg, #ffffff 8%, #7fd8f5 52%, #fbd63f 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html.dark .text-gradient-warm {
+  background: linear-gradient(100deg, #ffe27a 0%, #ef4444 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html.dark .shimmer-text {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.55) 20%,
+    #ffffff 42%,
+    rgba(255, 255, 255, 0.55) 62%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html.dark .aurora-border::before {
+  background: linear-gradient(
+    120deg,
+    rgba(0, 161, 222, 0.75),
+    rgba(250, 210, 1, 0.5),
+    rgba(61, 156, 109, 0.5),
+    rgba(0, 161, 222, 0.75)
+  );
+  background-size: 300% 300%;
+}
+
+/* Map info windows render on white paper in BOTH themes — pin their palette.
+   (Google Maps / Leaflet popups are always white, so slate classes inside
+   them must not follow the theme.) */
+.map-popup-paper .text-slate-800,
+.map-popup-paper .text-slate-900 {
+  color: #0f172a !important;
+}
+.map-popup-paper .text-slate-500,
+.map-popup-paper .text-slate-600 {
+  color: #64748b !important;
+}
+.map-popup-paper .bg-slate-100 {
+  background-color: #f1f5f9 !important;
+}
+
+/* ------------------------------------------------------- scroll reveal base */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

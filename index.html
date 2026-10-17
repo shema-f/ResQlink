@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- resQlink brand favicon (SVG master + PNG fallback) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <title>resQlink (Prototype) — Rwanda Emergency Response App | One-Tap SOS, AI Copilot, Offline SMS</title>
+    <meta
+      name="description"
+      content="Engineering prototype of resQlink, a proposed Rwanda emergency response app: one-tap SOS with GPS dispatch workflows, an AI copilot in Kinyarwanda, English and French, and SMS/USSD fallbacks. Demo data only — not connected to real emergency services."
+    />
+    <meta
+      name="keywords"
+      content="resQlink, Rwanda emergency app, prototype, demo, RNP 112, 113 traffic, SAMU 912, Fire 111, SOS app Rwanda, emergency dispatch, road safety Rwanda, Ferrivox"
+    />
+
+    <!-- Social / Open Graph -->
+    <meta property="og:title" content="resQlink (Prototype) — Help arrives in seconds, not minutes." />
+    <meta
+      property="og:description"
+      content="Interactive prototype of a one-tap SOS and dispatch platform for Rwanda, with an AI emergency copilot. Simulated data — not connected to real emergency services."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="resQlink Rwanda" />
+    <meta property="og:locale" content="en_RW" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="resQlink (Prototype) — Rwanda Emergency Response App" />
+    <meta
+      name="twitter:description"
+      content="One-tap SOS, simulated dispatch workflows and an AI emergency copilot. Engineering prototype with demo data."
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="resQlink" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Signature Ferrrivox pairing: Space Grotesk (UI) + JetBrains Mono (IDs/coords) -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Mobile app structured data (prototype: no store listing or ratings exist) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "resQlink (Prototype) — Rwanda Emergency Response",
+        "operatingSystem": "ANDROID, IOS",
+        "applicationCategory": "HealthApplication",
+        "applicationSubCategory": "Emergency Response",
+        "description": "Engineering prototype of a one-tap SOS and dispatch platform for Rwanda. Simulated data only; not connected to real emergency services.",
+        "inLanguage": ["rw", "en", "fr"],
+        "publisher": {
+          "@type": "Organization",
+          "name": "Ferrivox"
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-ink-950 text-slate-100 antialiased">
+    <script>
+      // White/Rwandan light is the default theme; only opt into the dark
+      // command palette before first paint when explicitly requested/saved.
+      try {
+        var qp = new URLSearchParams(location.search).get('theme');
+        var wantDark = qp === 'dark' || (!qp && localStorage.getItem('resqlink_theme') === 'dark');
+        if (wantDark) {
+          document.documentElement.classList.add('dark');
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', '#060d19');
+        }
+      } catch (e) {}
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
