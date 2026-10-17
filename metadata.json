@@ -1,6 +1,0 @@
-{
-  "name": "resQlink - Rwanda Emergency Response Platform",
-  "description": "National emergency response platform for Rwanda, featuring instant SOS reporting, location intelligence, RNP command dispatch, responder coordination, and road safety campaigns.",
-  "requestFramePermissions": ["geolocation"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

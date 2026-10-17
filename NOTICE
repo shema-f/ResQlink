@@ -1,0 +1,41 @@
+resQlink — Rwanda Emergency Response Platform
+Copyright 2026 Ferrivox
+
+This product includes software developed for the resQlink project
+(https://github.com/shema-f/ResQlink), licensed under the Apache
+License, Version 2.0.
+
+-------------------------------------------------------------------------------
+Third-party notices (dependencies and assets)
+-------------------------------------------------------------------------------
+
+Fonts (SIL Open Font License 1.1):
+  - Space Grotesk        — Florian Karsten (loaded via Google Fonts)
+  - JetBrains Mono       — JetBrains (loaded via Google Fonts)
+  - Plus Jakarta Sans    — Tokotype (press-kit brand assets)
+
+Open-source libraries (see package.json for exact versions):
+  - React, React DOM                 — MIT
+  - Express                          — MIT
+  - Socket.IO / socket.io-client     — MIT
+  - Leaflet                          — BSD-2-Clause
+  - lucide-react                     — ISC
+  - motion                           — MIT
+  - pg (PostgreSQL client)           — MIT
+  - @vis.gl/react-google-maps        — MIT
+  - @google/genai                    — Apache-2.0
+  - Vite, Tailwind CSS, TypeScript   — MIT / Apache-2.0
+
+Map data:
+  - OpenStreetMap tiles © OpenStreetMap contributors (Open Database License
+    1.0 — https://www.openstreetmap.org/copyright). Attribution is rendered in
+    the map views.
+
+Emergency numbers and institutional names (112/113/912/111, RNP directorates,
+hospital names) are public facts referenced for demo accuracy. This project is
+not affiliated with, endorsed by, or connected to the Rwanda National Police,
+SAMU, or any emergency service. Facility coordinates and phone numbers in the
+demo data are illustrative — see the README "Data provenance" table.
+
+All other source code in this repository is Copyright 2026 Ferrivox, licensed
+under Apache-2.0.

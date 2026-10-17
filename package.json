@@ -1,7 +1,34 @@
 {
-  "name": "react-example",
+  "name": "resqlink",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "One-tap SOS, live dispatch workflows and an AI emergency copilot designed for Rwanda's 112/113/912/111 emergency ecosystem — an engineering prototype with honest demo labelling and simulated data.",
+  "license": "Apache-2.0",
+  "author": "Ferrivox",
+  "homepage": "https://github.com/shema-f/ResQlink#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shema-f/ResQlink.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shema-f/ResQlink/issues"
+  },
+  "keywords": [
+    "rwanda",
+    "emergency-response",
+    "sos",
+    "dispatch",
+    "geospatial",
+    "postgis",
+    "socket.io",
+    "react",
+    "express",
+    "typescript",
+    "prototype"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
