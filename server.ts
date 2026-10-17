@@ -33,6 +33,10 @@ export interface ServerOptions {
   demoMode?: boolean;
   requireDispatchAuth?: boolean;
   serveClient?: boolean;
+  /** Requests/minute/client on the OTP request+verify endpoints (default 10, env RATE_LIMIT_OTP). */
+  otpRateLimit?: number;
+  /** Requests/minute/client on the AI assistant endpoint (default 30, env RATE_LIMIT_AI). */
+  aiRateLimit?: number;
 }
 
 const DEMO_MODE_DEFAULT =
@@ -665,6 +669,49 @@ function safeEqual(a: string, b: string): boolean {
   return crypto.timingSafeEqual(ab, bb);
 }
 
+/** Parse a positive integer env var, falling back to a sane default. */
+function readPositiveInt(value: string | undefined, fallback: number): number {
+  const parsed = Number.parseInt(value ?? '', 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+/**
+ * Minimal in-memory fixed-window rate limiter, keyed by client IP.
+ * Deliberately dependency-free: this prototype only needs basic protection
+ * against hammering the OTP generator and the AI proxy — not a production
+ * WAF. Buckets are swept on a timer so the map cannot grow unbounded.
+ */
+function createRateLimiter(windowMs: number, max: number): express.RequestHandler {
+  const buckets = new Map<string, { count: number; resetAt: number }>();
+  const sweeper = setInterval(() => {
+    const now = Date.now();
+    buckets.forEach((entry, key) => {
+      if (entry.resetAt <= now) buckets.delete(key);
+    });
+  }, windowMs);
+  sweeper.unref?.();
+
+  return (req, res, next) => {
+    const now = Date.now();
+    const key = req.ip || req.socket.remoteAddress || 'unknown';
+    let bucket = buckets.get(key);
+    if (!bucket || bucket.resetAt <= now) {
+      bucket = { count: 0, resetAt: now + windowMs };
+      buckets.set(key, bucket);
+    }
+    bucket.count += 1;
+    if (bucket.count > max) {
+      const retryAfterSeconds = Math.max(1, Math.ceil((bucket.resetAt - now) / 1000));
+      res.setHeader('Retry-After', String(retryAfterSeconds));
+      return res.status(429).json({
+        success: false,
+        message: `Too many requests from this client. Try again in ${retryAfterSeconds}s.`
+      });
+    }
+    return next();
+  };
+}
+
 /**
  * Builds the Express app + Socket.IO server WITHOUT binding a port, so the
  * API can be exercised directly by the test suite (`tests/server.test.ts`)
@@ -687,6 +734,24 @@ export async function createApp(options: ServerOptions = {}): Promise<CreatedSer
   });
 
   app.use(express.json());
+
+  // Conservative security headers on every response (API, static assets and
+  // the SPA shell). No CSP on purpose: the app loads Google Fonts and the
+  // optional Google Maps loader, and Vite injects inline styles in dev — a
+  // strict CSP would break documented features of this prototype.
+  app.use((_req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('Referrer-Policy', 'no-referrer');
+    next();
+  });
+
+  // Per-client rate limits for the endpoints abuse would actually target:
+  // OTP generation (randomness + audit writes) and the AI proxy (API quota).
+  const otpRateLimit = options.otpRateLimit ?? readPositiveInt(process.env.RATE_LIMIT_OTP, 10);
+  const aiRateLimit = options.aiRateLimit ?? readPositiveInt(process.env.RATE_LIMIT_AI, 30);
+  const otpLimiter = createRateLimiter(60_000, otpRateLimit);
+  const aiLimiter = createRateLimiter(60_000, aiRateLimit);
 
   /**
    * Authorization for dispatch-level mutations (incident status changes,
@@ -952,7 +1017,7 @@ export async function createApp(options: ServerOptions = {}): Promise<CreatedSer
   });
 
   // 5. POST /api/auth/otp/request - Request Phone OTP for Rwanda (+250)
-  app.post('/api/auth/otp/request', (req, res) => {
+  app.post('/api/auth/otp/request', otpLimiter, (req, res) => {
     const { phoneNumber } = req.body || {};
     if (!phoneNumber) {
       return res.status(400).json({ success: false, message: 'Phone number is required.' });
@@ -993,7 +1058,7 @@ export async function createApp(options: ServerOptions = {}): Promise<CreatedSer
   });
 
   // 6. POST /api/auth/otp/verify - Verify Phone OTP code
-  app.post('/api/auth/otp/verify', (req, res) => {
+  app.post('/api/auth/otp/verify', otpLimiter, (req, res) => {
     const { phoneNumber, otpCode } = req.body;
     const session = otpSessions.get(phoneNumber);
 
@@ -1298,7 +1363,7 @@ export async function createApp(options: ServerOptions = {}): Promise<CreatedSer
   });
 
   // 16. POST /api/ai/assistant - Gemini-powered emergency copilot ("Uwera")
-  app.post('/api/ai/assistant', async (req, res) => {
+  app.post('/api/ai/assistant', aiLimiter, async (req, res) => {
     const { message, language = 'en', history } = req.body || {};
     const prompt = typeof message === 'string' ? message.trim().slice(0, 1200) : '';
 

@@ -23,7 +23,15 @@ interface Harness {
 }
 
 async function startApp(options: ServerOptions = {}): Promise<Harness> {
-  const server = await createApp({ serveClient: false, ...options });
+  // Generous rate-limit defaults so unrelated suites can never flake against
+  // the per-IP OTP/AI budgets; the limiter itself is tested explicitly in the
+  // "rate limiting & security headers" block with deliberately low limits.
+  const server = await createApp({
+    serveClient: false,
+    otpRateLimit: 1000,
+    aiRateLimit: 1000,
+    ...options
+  });
   await new Promise<void>((resolve, reject) => {
     server.httpServer.once('error', reject);
     server.httpServer.listen(0, '127.0.0.1', resolve);
@@ -392,5 +400,45 @@ describe('local demo (auth not enforced)', () => {
     const id = created.body.data.id as string;
     const { status } = await api(h.base, `/api/incidents/${id}`, jsonInit('PATCH', { status: 'DISPATCHED' }));
     assert.equal(status, 200);
+  });
+});
+
+// ===========================================================================
+// 5. Rate limiting & security headers (dependency-free per-IP limiter)
+// ===========================================================================
+describe('rate limiting & security headers', () => {
+  let h: Harness;
+  before(async () => {
+    h = await startApp({ otpRateLimit: 3, aiRateLimit: 2 });
+  });
+  after(async () => {
+    await h.close();
+  });
+
+  test('OTP request endpoint answers 429 with Retry-After past its budget', async () => {
+    for (let i = 0; i < 3; i += 1) {
+      const ok = await api(h.base, '/api/auth/otp/request', jsonInit('POST', { phoneNumber: '+250788000111' }));
+      assert.equal(ok.status, 200, `request ${i + 1} should pass`);
+    }
+    const limited = await api(h.base, '/api/auth/otp/request', jsonInit('POST', { phoneNumber: '+250788000111' }));
+    assert.equal(limited.status, 429);
+    assert.equal(limited.body.success, false);
+    assert.match(limited.body.message, /Too many requests/);
+  });
+
+  test('AI assistant endpoint is rate limited independently', async () => {
+    const first = await api(h.base, '/api/ai/assistant', jsonInit('POST', { message: 'hello' }));
+    assert.equal(first.status, 200);
+    const second = await api(h.base, '/api/ai/assistant', jsonInit('POST', { message: 'hello again' }));
+    assert.equal(second.status, 200);
+    const limited = await api(h.base, '/api/ai/assistant', jsonInit('POST', { message: 'one too many' }));
+    assert.equal(limited.status, 429);
+  });
+
+  test('security headers ride on every API response', async () => {
+    const res = await fetch(`${h.base}/api/health`);
+    assert.equal(res.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(res.headers.get('x-frame-options'), 'DENY');
+    assert.equal(res.headers.get('referrer-policy'), 'no-referrer');
   });
 });
