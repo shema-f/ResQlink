@@ -5,7 +5,9 @@
 **An engineering prototype by [Ferrivox]**
 
 [![Status](https://img.shields.io/badge/status-prototype%20%2F%20demo-orange)](#status-prototype)
-[![Tests](https://img.shields.io/badge/tests-24%20passing-brightgreen)](#testing)
+[![CI](https://github.com/shema-f/ResQlink/actions/workflows/ci.yml/badge.svg)](https://github.com/shema-f/ResQlink/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-27%20passing-brightgreen)](#testing)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-blue)](#stack)
 [![React](https://img.shields.io/badge/React-19-61dafb)](#stack)
 
@@ -63,7 +65,7 @@ end:
 | RNP / SAMU dispatch integration | **None — data is fabricated** |
 | PostgreSQL/PostGIS | Optional; falls back to in-memory WGS84 store |
 | Gemini AI copilot | Live only if `GEMINI_API_KEY` is set; otherwise guided fallback |
-| Automated tests | 24 API tests (creation, auth, transitions, failures) |
+| Automated tests | 27 API tests (creation, auth, transitions, failures, rate limits) |
 
 Everything marked *simulated* or *none* is deliberately labelled instead of
 faked as real: see [Security & modes](#security--modes) and
@@ -109,6 +111,8 @@ npm start          # run the server (serves dist/ when NODE_ENV=production)
 | `VITE_DISPATCH_API_KEY` | Browser copy of the key (only if you trust the dashboard) | unset |
 | `DEMO_MODE` | Enables simulated OTP/identity behaviours | `true` outside `NODE_ENV=production` |
 | `CORS_ORIGIN` | Allowed Socket.IO origin when auth is enforced | same-origin |
+| `RATE_LIMIT_OTP` | OTP requests/minute/client IP | `10` |
+| `RATE_LIMIT_AI` | AI assistant requests/minute/client IP | `30` |
 | `PORT` | HTTP port | `3000` |
 
 ## Security & modes
@@ -135,6 +139,10 @@ Additional hardening in this build:
 
 - Status-transition rules: unknown statuses → `400`; terminal incidents
   (`RESOLVED` / `CANCELLED`) can never be reopened → `409`.
+- Per-client rate limiting on the OTP (10/min) and AI (30/min) endpoints,
+  returning `429` + `Retry-After`; tunable via `RATE_LIMIT_OTP` / `RATE_LIMIT_AI`.
+- Security headers on every response: `nosniff`, `X-Frame-Options: DENY`,
+  `Referrer-Policy: no-referrer`.
 - Incident-creation payload validation (numeric ranges, finite coordinates,
   JSON-object body) → `400` instead of inventing incidents from garbage.
 - The client never seeds a pre-verified phone number; a session only exists
@@ -191,7 +199,7 @@ Seed data carries the same disclaimer inline — see the provenance comments in
 npm test
 ```
 
-24 tests in [`tests/server.test.ts`](tests/server.test.ts) run against the real
+27 tests in [`tests/server.test.ts`](tests/server.test.ts) run against the real
 Express app in-process (ephemeral port, no Vite, no external services):
 
 - **Incident creation** — success shape, priority rules (unconscious → CRITICAL,
@@ -204,6 +212,11 @@ Express app in-process (ephemeral port, no Vite, no external services):
 - **Failure scenarios** — unknown responder, invalid referrals, OTP request/
   verify failure paths, and proof that production mode refuses simulation
   (503 without `demoCode`, `123456` rejected).
+- **Rate limiting & security headers** — `429` + `Retry-After` past the OTP
+  and AI budgets, independent buckets per endpoint, headers on API responses.
+
+CI runs `lint`, `test` and `build` on every push and pull request via
+[GitHub Actions](.github/workflows/ci.yml).
 
 ## Project structure
 
@@ -231,6 +244,47 @@ Express app in-process (ephemeral port, no Vite, no external services):
   plugs in a real pool).
 - Official operational validation — none of this has been exercised with real
   responders, and it must not be until partners review it.
+
+## Contributing
+
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for setup,
+conventions and the pull-request process, and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+for the community standards. Beginner-friendly starting points are listed there.
+
+## Security
+
+To report a vulnerability, please use the private
+[GitHub Security Advisory](https://github.com/shema-f/ResQlink/security/advisories/new)
+form — never a public issue. [SECURITY.md](SECURITY.md) documents the threat
+model, known limitations and intentional security behaviour of this prototype.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history (semantic versioning).
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE) — © 2026 Ferrivox. See
+[NOTICE](NOTICE) for attribution requirements and third-party notices.
+
+## Third-party notices
+
+This project stands on the shoulders of open-source work; full attributions
+live in [NOTICE](NOTICE). Summary:
+
+| Asset | License |
+| --- | --- |
+| React, Express, Socket.IO, motion, Vite, Tailwind CSS | MIT |
+| TypeScript, @google/genai | Apache-2.0 |
+| Leaflet | BSD-2-Clause |
+| lucide-react | ISC |
+| Space Grotesk, JetBrains Mono, Plus Jakarta Sans fonts | SIL OFL 1.1 |
+| OpenStreetMap map data (in map views) | © OpenStreetMap contributors, ODbL 1.0 |
+
+Emergency numbers and institutional names (112/113/912/111, RNP directorates,
+hospital names) are public facts referenced for demo accuracy. This project is
+**not affiliated with** the Rwanda National Police, SAMU, or any emergency
+service.
 
 ## About Ferrivox
 
