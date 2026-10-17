@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/shema-f/ResQlink/security/advisories/new
+    about: Report security issues privately — never in a public issue.
+  - name: In an emergency (not this project)
+    url: https://www.gov.rw/emergency
+    about: resQlink is a prototype. For real emergencies in Rwanda call 112 / 113 / 912 / 111.

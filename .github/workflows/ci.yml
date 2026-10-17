@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, test & build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # No npm lockfile is committed yet (bun.lock documents the dependency
+      # tree today), so `npm ci` is not available; `npm install` keeps CI
+      # working until a lockfile strategy is chosen. See CONTRIBUTING.md.
+      - name: Install dependencies
+        run: npm install
+
+      - name: Typecheck (tsc --noEmit)
+        run: npm run lint
+
+      - name: API test suite (node:test)
+        run: npm test
+
+      - name: Production build (vite build)
+        run: npm run build

@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest an improvement or new capability
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: The real-world or developer problem, not the proposed solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What you would like to happen, and any alternatives you considered.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Citizen SOS / reporting
+        - Command dashboard / dispatch
+        - Responder portal
+        - AI copilot (Uwera)
+        - Maps / geospatial
+        - API / server
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: honesty
+    attributes:
+      label: Prototype-honesty check
+      description: resQlink must never present simulated behaviour as real.
+      options:
+        - label: My request respects the simulated/real boundary described in the README (no request to wire this demo to real emergency services without partner review)
+          required: true
