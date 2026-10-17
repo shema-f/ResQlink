@@ -394,21 +394,22 @@ export default function App() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="truncate text-[12px] font-extrabold text-ink-hd">
-                Take resQlink with you
+                Explore the resQlink prototype
               </p>
               <p className="truncate text-[10.5px] text-slate-400">
-                One-tap SOS, offline mode & the AI copilot — on Android and iPhone.
+                Source code and API documentation are available on GitHub.
               </p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <GooglePlayBadge size="sm" lang={currentLang} className="hidden sm:inline-flex" />
               <AppStoreBadge size="sm" lang={currentLang} className="hidden sm:inline-flex" />
               <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
+                href="https://github.com/shema-f/ResQlink"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="sm:hidden rounded-xl bg-rwblue-500 px-3 py-2 text-[11px] font-black text-btn-ink"
               >
-                Get the app
+                View source
               </a>
               <button
                 onClick={() => setPromoDismissed(true)}

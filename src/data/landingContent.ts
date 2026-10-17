@@ -132,7 +132,7 @@ const en: LandingCopy = {
     titleLead: 'Help arrives in',
     titleAccent: 'seconds,',
     titleTail: 'not minutes.',
-    body: 'resQlink is Rwanda\u2019s national emergency response app. One tap sends your exact GPS position, casualties and hazards straight to the Rwanda National Police, SAMU and the Fire & Rescue Brigade — with an AI copilot talking you through every second.',
+    body: 'resQlink is an independent engineering prototype exploring emergency-reporting and dispatch workflows for Rwanda. Its incidents, responder updates and service connections are simulated; call the official emergency numbers in a real emergency.',
     ratingsSuffix: 'ratings',
     downloadsSuffix: 'downloads',
     freeForever: 'Free forever',
@@ -156,16 +156,16 @@ const en: LandingCopy = {
   },
 
   stats: [
-    { label: 'Average alert to dispatch' },
-    { label: 'Citizens protected' },
-    { label: 'Districts covered' },
-    { label: 'GPS accuracy under 10m' }
+    { label: 'Accessible web interface' },
+    { label: 'Express + Socket.IO demo API' },
+    { label: 'Interface languages' },
+    { label: 'Synthetic data only' }
   ],
 
   features: {
     eyebrow: 'Built for Rwanda',
     title: 'Everything an emergency needs, in one pocket app.',
-    body: 'Designed with the Rwanda National Police traffic directorate and SAMU paramedics, then hardened for the reality of Rwandan roads.',
+    body: 'Built as an independent, open-source prototype. It has not been designed, reviewed or operated with the Rwanda National Police, SAMU or any emergency service.',
     items: [
       {
         title: 'One-tap SOS',
@@ -350,7 +350,7 @@ const rw: LandingCopy = {
     titleLead: 'Ubutabazi buhagera',
     titleAccent: 'vuba cyane,',
     titleTail: 'ntibutinda.',
-    body: 'resQlink ni porogaramu y\u2019igihugu y\u2019ubutabazi mu Rwanda. Kanda rimwe, ahantu uri, umubare w\u2019abakomeretse n\u2019ibyago bihita biherezwa kuri Polisi y\u2019u Rwanda, SAMU na Kizimyamuriro — hamwe n\u2019umufasha wa AI ukubwira icyo gukora buri kanya.',
+    body: 'resQlink ni porogaramu y\u2019igerageza yigenga igamije kwerekana uburyo bwo gutanga amakuru y\u2019ubutabazi mu Rwanda. Amakuru yose n\u2019ihuza n\u2019inzego z\u2019ubutabazi ni ay\u2019igerageza; mu gihe cy\u2019ubutabazi nyakuri hamagara nimero zemewe.',
     ratingsSuffix: 'amanota',
     downloadsSuffix: 'bakuramo',
     freeForever: 'Ni ubuntu iteka',
@@ -374,16 +374,16 @@ const rw: LandingCopy = {
   },
 
   stats: [
-    { label: 'Igihe rusange kuva ukanze kugera ku butabazi' },
-    { label: 'Abaturage barinzwe' },
-    { label: 'Uturere twose' },
-    { label: 'GPS yizewe munsi ya metero 10' }
+    { label: 'Urubuga rworohereza buri wese' },
+    { label: 'API y\u2019igerageza Express + Socket.IO' },
+    { label: 'Indimi z\u2019imbere' },
+    { label: 'Amakuru y\u2019igerageza gusa' }
   ],
 
   features: {
     eyebrow: 'Yakorewe u Rwanda',
     title: 'Ibyose ubutabazi bukeneye, muri porogaramu imwe.',
-    body: 'Yakorewe hamwe n\u2019ishami ry\u2019impanuka rya Polisi y\u2019u Rwanda n\u2019abaganga ba SAMU, hanyuma igakomezwa ku buryo buhuye n\u2019imihanda y\u2019u Rwanda.',
+    body: 'Yubatswe nk\u2019igerageza ryigenga rifunguye. Nta rwego rwa Polisi y\u2019u Rwanda, SAMU cyangwa urundi rwego rw\u2019ubutabazi rwayigenzuye cyangwa ruyikoresha.',
     items: [
       {
         title: 'SOS mu kanda rimwe',
@@ -568,7 +568,7 @@ const fr: LandingCopy = {
     titleLead: 'Les secours arrivent en',
     titleAccent: 'quelques secondes,',
     titleTail: 'pas en minutes.',
-    body: 'resQlink est l\u2019application nationale d\u2019urgence du Rwanda. Un seul geste envoie votre position GPS exacte, le nombre de blessés et les dangers directement à la Police Nationale du Rwanda, au SAMU et aux Sapeurs-Pompiers — avec un copilote IA qui vous guide à chaque seconde.',
+    body: 'resQlink est un prototype d\u2019ingénierie indépendant qui explore les flux de signalement et de coordination des urgences au Rwanda. Les incidents, les mises à jour des intervenants et les connexions de service sont simulés ; appelez les numéros officiels en cas d\u2019urgence réelle.',
     ratingsSuffix: 'notes',
     downloadsSuffix: 'téléchargements',
     freeForever: 'Gratuit pour toujours',
@@ -592,16 +592,16 @@ const fr: LandingCopy = {
   },
 
   stats: [
-    { label: 'Délai moyen entre l\u2019alerte et le départ' },
-    { label: 'Citoyens protégés' },
-    { label: 'Districts couverts' },
-    { label: 'Précision GPS sous 10 m' }
+    { label: 'Interface web accessible' },
+    { label: 'API de démonstration Express + Socket.IO' },
+    { label: 'Langues de l\u2019interface' },
+    { label: 'Données synthétiques uniquement' }
   ],
 
   features: {
     eyebrow: 'Conçu pour le Rwanda',
     title: 'Tout ce qu\u2019une urgence exige, dans une seule application.',
-    body: 'Conçue avec la direction de la circulation de la Police Nationale du Rwanda et les urgentistes du SAMU, puis éprouvée sur la réalité des routes rwandaises.',
+    body: 'Construite comme un prototype open source indépendant. Elle n\u2019a pas été conçue, examinée ni exploitée avec la Police Nationale du Rwanda, le SAMU ou un service d\u2019urgence.',
     items: [
       {
         title: 'SOS en un seul geste',

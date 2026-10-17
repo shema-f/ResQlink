@@ -238,15 +238,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-medium text-slate-500">
                   <span className="flex items-center gap-1.5">
                     <Star className="h-3.5 w-3.5 fill-rwsun-400 text-rwsun-400" />
-                    <span className="font-bold text-slate-300">{APP_CONFIG.rating}</span> ·{' '}
-                    {APP_CONFIG.reviewCount} {copy.hero.ratingsSuffix}
+                    <span className="font-bold text-slate-300">Open source</span>
+                    {' '}prototype
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Users className="h-3.5 w-3.5 text-rwblue-400" />
-                    {APP_CONFIG.downloads} {copy.hero.downloadsSuffix}
+                    Synthetic demo data
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> {copy.hero.freeForever}
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Not an emergency service
                   </span>
                 </p>
               </div>
@@ -736,8 +736,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                 <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-400">
                   <span className="flex items-center gap-1.5">
-                    <Star className="h-3.5 w-3.5 fill-rwsun-400 text-rwsun-400" /> {APP_CONFIG.rating}{' '}
-                    · {APP_CONFIG.reviewCount} {copy.download.reviews}
+                    <Star className="h-3.5 w-3.5 text-rwsun-400" /> Prototype — no mobile app listing
                   </span>
                   <span className="flex items-center gap-1.5">
                     <PhoneCall className="h-3.5 w-3.5 shrink-0 text-rwblue-300" /> {copy.download.tollFree}
@@ -770,7 +769,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   {copy.download.platforms}
                 </p>
                 <p className="mt-1 truncate font-mono text-[10px] text-slate-500">
-                  {APP_CONFIG.androidPackage}
+                  GitHub source & API documentation
                 </p>
               </div>
             </div>

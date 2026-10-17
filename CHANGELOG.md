@@ -1,11 +1,22 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Replaced non-existent mobile-store links, government-looking identifiers and
+  invented adoption/performance metrics with real GitHub/API documentation
+  links and explicit prototype facts.
+- Updated referral links to use the current deployment origin rather than an
+  unverified production domain.
+- Clarified the public landing copy in Kinyarwanda, English and French: the
+  project is independent, uses synthetic data and is not connected to emergency
+  services.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
 
 ## [0.1.0] - 2026-10-17
 

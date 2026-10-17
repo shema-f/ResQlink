@@ -175,7 +175,11 @@ export function clearIncomingReferral(): void {
 /* ------------------------------------------------------------------ sharing */
 
 export function referralLink(code: string): string {
-  return `${APP_CONFIG.shareBaseUrl}?ref=${encodeURIComponent(code)}`;
+  const base =
+    typeof window === 'undefined'
+      ? APP_CONFIG.sharePath
+      : `${window.location.origin}${APP_CONFIG.sharePath}`;
+  return `${base}?ref=${encodeURIComponent(code)}`;
 }
 
 const SHARE_COPY: Record<Language, (code: string, link: string) => string> = {

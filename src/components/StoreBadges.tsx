@@ -111,19 +111,19 @@ export const GooglePlayBadge: React.FC<BadgeProps> = ({
   const s = SIZES[size];
   return (
     <a
-      href={APP_CONFIG.playStoreUrl}
+      href={APP_CONFIG.repositoryUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Get resQlink on Google Play"
+      aria-label="View the resQlink source code on GitHub"
       className={`${badgeShell} ${s.pill} ${block ? 'w-full justify-center' : ''} ${className}`}
     >
       <span className={badgeSheen} />
       <GooglePlayGlyph className={`${s.glyph} shrink-0 relative`} />
       <span className="flex flex-col items-start leading-none relative">
         <span className={`${s.label} font-semibold uppercase text-slate-400`}>
-          {kicker(lang, 'getItOn', 'Get it on')}
+          Open source
         </span>
-        <span className={`${s.title} font-extrabold tracking-tight mt-0.5`}>Google Play</span>
+        <span className={`${s.title} font-extrabold tracking-tight mt-0.5`}>View source</span>
       </span>
     </a>
   );
@@ -138,19 +138,19 @@ export const AppStoreBadge: React.FC<BadgeProps> = ({
   const s = SIZES[size];
   return (
     <a
-      href={APP_CONFIG.appStoreUrl}
+      href={APP_CONFIG.apiDocsUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Download resQlink on the App Store"
+      aria-label="Read the resQlink API documentation on GitHub"
       className={`${badgeShell} ${s.pill} ${block ? 'w-full justify-center' : ''} ${className}`}
     >
       <span className={badgeSheen} />
       <AppleGlyph className={`${s.glyph} shrink-0 relative text-ink-hd`} />
       <span className="flex flex-col items-start leading-none relative">
         <span className={`${s.label} font-semibold uppercase text-slate-400`}>
-          {kicker(lang, 'downloadOn', 'Download on')}
+          Developer docs
         </span>
-        <span className={`${s.title} font-extrabold tracking-tight mt-0.5`}>App Store</span>
+        <span className={`${s.title} font-extrabold tracking-tight mt-0.5`}>API guide</span>
       </span>
     </a>
   );
